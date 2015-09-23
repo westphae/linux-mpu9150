@@ -39,8 +39,10 @@ void print_fused_euler_angles(mpudata_t *mpu);
 void print_fused_quaternion(mpudata_t *mpu);
 void print_calibrated_accel(mpudata_t *mpu);
 void print_calibrated_mag(mpudata_t *mpu);
+void print_all(mpudata_t *mpu);
 void register_sig_handler();
 void sigint_handler(int sig);
+FILE *fp_out;
 
 int done;
 
@@ -146,6 +148,12 @@ int main(int argc, char **argv)
 		}
 	}
 
+	fp_out = fopen("/tmp/imu.json", "w");
+	if (!fp_out) {
+		printf("can't open /tmp/imu.json\n");
+		return -1;
+	}
+
 	register_sig_handler();
 
 	mpu9150_set_debug(verbose);
@@ -187,7 +195,8 @@ void read_loop(unsigned int sample_rate)
 
 	while (!done) {
 		if (mpu9150_read(&mpu) == 0) {
-			print_fused_euler_angles(&mpu);
+			print_all(&mpu);
+			//print_fused_euler_angles(&mpu);
 			// printf_fused_quaternions(&mpu);
 			// print_calibrated_accel(&mpu);
 			// print_calibrated_mag(&mpu);
@@ -238,6 +247,43 @@ void print_calibrated_mag(mpudata_t *mpu)
 			mpu->calibratedMag[VEC3_Z]);
 
 	fflush(stdout);
+}
+
+void print_all(mpudata_t *mpu)
+{
+	char buf[2048];
+	snprintf(buf, sizeof(buf), "{rawGyro:\"%d %d %d\",\
+							rawAccel:\"%d %d %d\",\
+							rawQuat:\"%ld %ld %ld %ld\",\
+							dmpTimestamp:\"%lu\",\
+							rawMag:\"%d %d %d\",\
+							magTimestamp:\"%lu\",\
+							calibratedAccel:\"%d %d %d\",\
+							calibratedMag:\"%d %d %d\",\
+							fusedQuat:\"%f %f %f %f\",\
+							fusedEuler:\"%f %f %f\",\
+							lastDMPYaw:\"%f\",\
+							lastYaw:\"%f\"}",
+							mpu->rawGyro[0], mpu->rawGyro[1], mpu->rawGyro[2],
+							mpu->rawAccel[0], mpu->rawAccel[1], mpu->rawAccel[2],
+							mpu->rawQuat[0], mpu->rawQuat[1], mpu->rawQuat[2], mpu->rawQuat[3],
+							mpu->dmpTimestamp,
+							mpu->rawMag[0], mpu->rawMag[1], mpu->rawMag[2],
+							mpu->magTimestamp,
+							mpu->calibratedAccel[0], mpu->calibratedAccel[1], mpu->calibratedAccel[2],
+							mpu->calibratedMag[0], mpu->calibratedMag[1], mpu->calibratedMag[2],
+							mpu->fusedQuat[0], mpu->fusedQuat[1], mpu->fusedQuat[2], mpu->fusedQuat[3],
+							mpu->fusedEuler[0], mpu->fusedEuler[1], mpu->fusedEuler[2],
+							mpu->lastDMPYaw,
+							mpu->lastYaw);
+
+	fseek(fp_out, 0, SEEK_SET);
+	fprintf(fp_out, "%s\n", buf);
+	char z[128];
+	memset(&z, 0, sizeof(z));
+	fwrite(z, sizeof(char), sizeof(z), fp_out);
+
+	fflush(fp_out);
 }
 
 int set_cal(int mag, char *cal_file)
