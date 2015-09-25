@@ -252,18 +252,18 @@ void print_calibrated_mag(mpudata_t *mpu)
 void print_all(mpudata_t *mpu)
 {
 	char buf[2048];
-	snprintf(buf, sizeof(buf), "{rawGyro:\"%d %d %d\",\
-							rawAccel:\"%d %d %d\",\
-							rawQuat:\"%ld %ld %ld %ld\",\
-							dmpTimestamp:\"%lu\",\
-							rawMag:\"%d %d %d\",\
-							magTimestamp:\"%lu\",\
-							calibratedAccel:\"%d %d %d\",\
-							calibratedMag:\"%d %d %d\",\
-							fusedQuat:\"%f %f %f %f\",\
-							fusedEuler:\"%f %f %f\",\
-							lastDMPYaw:\"%f\",\
-							lastYaw:\"%f\"}",
+	snprintf(buf, sizeof(buf), "{\"rawGyro\":\"%d %d %d\",\
+							\"rawAccel\":\"%d %d %d\",\
+							\"rawQuat\":\"%ld %ld %ld %ld\",\
+							\"dmpTimestamp\":\"%lu\",\
+							\"rawMag\":\"%d %d %d\",\
+							\"magTimestamp\":\"%lu\",\
+							\"calibratedAccel\":\"%d %d %d\",\
+							\"calibratedMag\":\"%d %d %d\",\
+							\"fusedQuat\":\"%f %f %f %f\",\
+							\"fusedEuler\":\"%f %f %f\",\
+							\"lastDMPYaw\":\"%f\",\
+							\"lastYaw\":\"%f\"}",
 							mpu->rawGyro[0], mpu->rawGyro[1], mpu->rawGyro[2],
 							mpu->rawAccel[0], mpu->rawAccel[1], mpu->rawAccel[2],
 							mpu->rawQuat[0], mpu->rawQuat[1], mpu->rawQuat[2], mpu->rawQuat[3],
