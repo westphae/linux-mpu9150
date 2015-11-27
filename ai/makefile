@@ -1,4 +1,4 @@
-# to install OpenGL and deps on RPi2 do
+# to install OpenGL and all its deps on RPi2 do:
 # apt-get install freeglut3-dev
 
 SHELL = /bin/sh
@@ -12,6 +12,8 @@ else
 endif
 
 project0: main.cpp
+	cd ../ && $(MAKE) -f Makefile-native-lib clean
+	cd ../ && $(MAKE) -f Makefile-native-lib
 	$(CC) $(CFLAGS) -o main main.cpp ogcCircleEvaluator.cpp -L../ -limu $(LDFLAGS)
 clean:
 	rm -rf main *.o

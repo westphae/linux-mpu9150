@@ -775,7 +775,7 @@ void mouse(int button, int state, int x, int y) {
  */
 void idle_handler(void) {
     static float p, r, h;
-    if (read_mpu(&p, &r, &h) != -1 {
+    if (read_mpu(&p, &r, &h) != -1) {
         g_pitch = (double)p;
         g_roll = (double)r;
         g_heading = (double)h;
