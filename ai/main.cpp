@@ -741,10 +741,16 @@ void display(void) {
  *  \retval void
  */
 void mouse(int button, int state, int x, int y) {
+    static float po, ro, h;
     switch (button) {
     case GLUT_LEFT_BUTTON:
-        if (state == GLUT_DOWN)
-            read_mpu(&g_pitch_offset, &g_roll_offset, &g_heading);
+        if (state == GLUT_DOWN){
+            if (read_mpu(&po, &ro, &h) != -1) {
+                g_pitch_offset = (double)po;
+                g_roll_offset = (double)ro;
+                g_heading = (double)h;
+            }
+        }
         break;
     case GLUT_MIDDLE_BUTTON:
         break;
@@ -768,7 +774,12 @@ void mouse(int button, int state, int x, int y) {
  *  \retval void
  */
 void idle_handler(void) {
-    read_mpu(&g_pitch, &g_roll, &g_heading);
+    static float p, r, h;
+    if (read_mpu(&p, &r, &h) != -1 {
+        g_pitch = (double)p;
+        g_roll = (double)r;
+        g_heading = (double)h;
+    }
     display();
 }
 
