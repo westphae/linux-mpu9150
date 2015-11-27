@@ -16,7 +16,7 @@
 package mpu
 
 /*
-#cgo linux LDFLAGS: -L. -limu -lm
+#cgo linux LDFLAGS: -limu -lm
 #cgo darwin LDFLAGS: -limu -lm
 #cgo windows CFLAGS: -IC:/WINDOWS/system32
 #cgo windows LDFLAGS: -L. -limu -LC:/WINDOWS/system32
@@ -45,10 +45,10 @@ func CloseMPU() {
 }
 
 // ReadMPU
-func ReadMPU() (pitch, roll, heading float64, err error) {
-	i := int(C.read_mpu((*C.double)(unsafe.Pointer(&pitch)),
-		(*C.double)(unsafe.Pointer(&roll)),
-		(*C.double)(unsafe.Pointer(&heading))))
+func ReadMPU() (pitch, roll, heading float32, err error) {
+	i := int(C.read_mpu((*C.float)(unsafe.Pointer(&pitch)),
+		(*C.float)(unsafe.Pointer(&roll)),
+		(*C.float)(unsafe.Pointer(&heading))))
 	if i == -1 {
 		err = errors.New("error reading MPU")
 	}

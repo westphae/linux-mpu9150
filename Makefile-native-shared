@@ -25,6 +25,7 @@ all : libimu imucal
 
 libimu : $(OBJS) libimu.o
 	$(CC) libimu.o $(OBJS) -shared -o libimu.so
+	sudo cp -f ./libimu.so /usr/lib/libimu.so
 
 imucal : $(OBJS) imucal.o
 	$(CC) $(CFLAGS) $(OBJS) imucal.o -lm -o imucal

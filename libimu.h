@@ -17,7 +17,7 @@ extern "C" {
 
 extern void close_mpu(void);
 extern int init_mpu(void);
-extern int read_mpu(double *pitch, double *roll, double *heading);
+extern int read_mpu(float *pitch, float *roll, float *heading);
 extern int set_cal(int mag, char *cal_file);
 
 #ifdef __cplusplus

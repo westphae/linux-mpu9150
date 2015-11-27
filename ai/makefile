@@ -1,3 +1,6 @@
+# to install OpenGL and deps on RPi2 do
+# apt-get install freeglut3-dev
+
 SHELL = /bin/sh
 CFLAGS+=-I../
 ifeq ($(shell uname -s),Darwin)
