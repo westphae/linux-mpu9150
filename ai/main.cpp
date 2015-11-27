@@ -809,6 +809,7 @@ void signal_handler(int32_t signal) {
         break;
     }
 
+    close_mpu();
     // pass a successful exit so our atexit handler is called
     exit(EXIT_SUCCESS);
 }
@@ -854,7 +855,10 @@ int main(int argc, char* argv[]) {
         perror("An error occured while setting the SIGSEGV signal handler.\n");
 
 #if 0
-    g_fd = open_comm();
+    if (init_mpu() == -1)
+        printf("exiting, mpu init failed\n");
+
+    // set_cal(mag, cal_file);
 
     if (g_fd == -1) {
         printf("error opening comm port...\n");
