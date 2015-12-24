@@ -23,7 +23,7 @@ package mpu
 
 #include <stdlib.h>
 #include <stdint.h>
-#include "libimu.h"
+#include "../libimu.h"
 */
 import "C"
 import (
@@ -35,8 +35,8 @@ import (
 var PackageVersion = "v0.1"
 
 // InitMPU
-func InitMPU() {
-	C.close_mpu()
+func InitMPU() int {
+	return int(C.init_mpu())
 }
 
 // CloseMPU

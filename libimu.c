@@ -58,9 +58,7 @@ int init_mpu(void)
 	yaw_mix_factor = DEFAULT_YAW_MIX_FACTOR;
 
 	mpu9150_set_debug(verbose);
-	if (mpu9150_init(i2c_bus, sample_rate, yaw_mix_factor))
-		return -1;
-	return 0;
+	return mpu9150_init(i2c_bus, sample_rate, yaw_mix_factor);
 }
 
 int read_mpu(float *pitch, float *roll, float *heading)
