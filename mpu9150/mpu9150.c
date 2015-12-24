@@ -241,8 +241,10 @@ int mpu9150_read_dmp(mpudata_t *mpu)
 	short sensors;
 	unsigned char more;
 
-	if (!data_ready())
+	if (!data_ready()) {
+		printf("data_ready() - data not ready.\n");
 		return -1;
+	}
 
 	if (dmp_read_fifo(mpu->rawGyro, mpu->rawAccel, mpu->rawQuat, &mpu->dmpTimestamp, &sensors, &more) < 0) {
 		printf("dmp_read_fifo() failed\n");

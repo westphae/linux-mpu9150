@@ -65,13 +65,11 @@ int read_mpu(float *pitch, float *roll, float *heading)
 {
 	static mpudata_t mpu;
 	memset(&mpu, 0, sizeof(mpudata_t));
-	if (mpu9150_read(&mpu) != 0)
-		return -1;
+	return mpu9150_read(&mpu);
 	// fused_euler_angles(&mpu);
 	// fused_quaternions(&mpu);
 	// calibrated_accel(&mpu);
 	// calibrated_mag(&mpu);
-	return 0;
 }
 
 // void fused_euler_angles(mpudata_t *mpu)
