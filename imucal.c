@@ -180,6 +180,7 @@ void read_loop(unsigned int sample_rate)
 		change = 0;
 
 		if (mag_mode) {
+#ifdef AK89xx_SECONDARY
 			if (mpu9150_read_mag(&mpu) == 0) {
 				for (i = 0; i < 3; i++) {
 					if (mpu.rawMag[i] < minVal[i]) {
@@ -193,6 +194,9 @@ void read_loop(unsigned int sample_rate)
 					}
 				}
 			}
+#else
+			printf("mag mode selected but not magnetometer installed.\n");
+#endif
 		}
 		else {
 			if (mpu9150_read_dmp(&mpu) == 0) {

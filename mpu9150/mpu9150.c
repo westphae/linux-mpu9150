@@ -80,7 +80,11 @@ int mpu9150_init(int i2c_bus, int sample_rate, int mix_factor)
 	printf(".");
 	fflush(stdout);
 
+#ifdef AK89xx_SECONDARY
 	if (mpu_set_sensors(INV_XYZ_GYRO | INV_XYZ_ACCEL | INV_XYZ_COMPASS)) {
+#else
+	if (mpu_set_sensors(INV_XYZ_GYRO | INV_XYZ_ACCEL | INV_XYZ_COMPASS)) {
+#endif
 		printf("\nmpu_set_sensors() failed\n");
 		return -1;
 	}
@@ -104,10 +108,12 @@ int mpu9150_init(int i2c_bus, int sample_rate, int mix_factor)
 	printf(".");
 	fflush(stdout);
 
+#ifdef AK89xx_SECONDARY
 	if (mpu_set_compass_sample_rate(sample_rate)) {
 		printf("\nmpu_set_compass_sample_rate() failed\n");
 		return -1;
 	}
+#endif
 
 	printf(".");
 	fflush(stdout);
@@ -254,6 +260,7 @@ int mpu9150_read_dmp(mpudata_t *mpu)
 	return 0;
 }
 
+#ifdef AK89xx_SECONDARY
 int mpu9150_read_mag(mpudata_t *mpu)
 {
 	if (mpu_get_compass_reg(mpu->rawMag, &mpu->magTimestamp) < 0) {
@@ -263,15 +270,16 @@ int mpu9150_read_mag(mpudata_t *mpu)
 
 	return 0;
 }
+#endif
 
 int mpu9150_read(mpudata_t *mpu)
 {
 	if (mpu9150_read_dmp(mpu) != 0)
 		return -1;
-
+#ifdef AK89xx_SECONDARY
 	if (mpu9150_read_mag(mpu) != 0)
 		return -1;
-
+#endif
 	calibrate_data(mpu);
 
 	return data_fusion(mpu);
