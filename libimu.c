@@ -50,22 +50,37 @@ void close_mpu(void)
 	mpu9150_exit();
 }
 
+
+
 int init_mpu(void)
 {
-	verbose = 0;
+	int ret;
+	verbose = 1;
 	i2c_bus = DEFAULT_I2C_BUS;
 	sample_rate = DEFAULT_SAMPLE_RATE_HZ;
 	yaw_mix_factor = DEFAULT_YAW_MIX_FACTOR;
 
 	mpu9150_set_debug(verbose);
-	return mpu9150_init(i2c_bus, sample_rate, yaw_mix_factor);
+	if ((ret = mpu9150_init(i2c_bus, sample_rate, yaw_mix_factor)) != 0) {
+		return ret;
+	}
+
+	set_cal(0, NULL);
+	set_cal(1, NULL);
+
+	return ret;
 }
 
 int read_mpu(float *pitch, float *roll, float *heading)
 {
+	int ret;
 	static mpudata_t mpu;
 	memset(&mpu, 0, sizeof(mpudata_t));
-	return mpu9150_read(&mpu);
+	ret = mpu9150_read(&mpu);
+	*pitch = mpu.fusedEuler[0];
+	*roll = mpu.fusedEuler[1];
+	*heading = mpu.fusedEuler[2];
+	return ret;
 	// fused_euler_angles(&mpu);
 	// fused_quaternions(&mpu);
 	// calibrated_accel(&mpu);
