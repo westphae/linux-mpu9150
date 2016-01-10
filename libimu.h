@@ -9,7 +9,11 @@
 
 // platform independent
 #define DEFAULT_SAMPLE_RATE_HZ	(10)
+#ifdef MPU6050
+#define DEFAULT_YAW_MIX_FACTOR (0)
+#else
 #define DEFAULT_YAW_MIX_FACTOR (4)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
