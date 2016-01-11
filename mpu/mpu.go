@@ -35,8 +35,8 @@ import (
 var PackageVersion = "v0.1"
 
 // InitMPU
-func InitMPU() int {
-	return int(C.init_mpu())
+func InitMPU(sample_rate, yaw_mix_factor int) int {
+	return int(C.init_mpu(C.int(sample_rate), C.int(yaw_mix_factor)))
 }
 
 // CloseMPU

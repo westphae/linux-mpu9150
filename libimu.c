@@ -52,13 +52,13 @@ void close_mpu(void)
 
 
 
-int init_mpu(void)
+int init_mpu(int sample_rate, int yaw_mix_factor)
 {
 	int ret;
 	verbose = 1;
 	i2c_bus = DEFAULT_I2C_BUS;
-	sample_rate = DEFAULT_SAMPLE_RATE_HZ;
-	yaw_mix_factor = DEFAULT_YAW_MIX_FACTOR;
+	// sample_rate = DEFAULT_SAMPLE_RATE_HZ;
+	// yaw_mix_factor = DEFAULT_YAW_MIX_FACTOR;
 
 	mpu9150_set_debug(verbose);
 	if ((ret = mpu9150_init(i2c_bus, sample_rate, yaw_mix_factor)) != 0) {

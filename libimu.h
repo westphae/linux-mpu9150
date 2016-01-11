@@ -8,19 +8,16 @@
 #define DEFAULT_I2C_BUS (1)
 
 // platform independent
-#define DEFAULT_SAMPLE_RATE_HZ	(10)
-#ifdef MPU6050
-#define DEFAULT_YAW_MIX_FACTOR (0)
-#else
-#define DEFAULT_YAW_MIX_FACTOR (4)
-#endif
+//#define DEFAULT_SAMPLE_RATE_HZ	(10)
+//#define DEFAULT_YAW_MIX_FACTOR (0)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 extern void close_mpu(void);
-extern int init_mpu(void);
+//extern int init_mpu(void);
+extern int init_mpu(int sample_rate, int yaw_mix_factor);
 extern int read_mpu(float *pitch, float *roll, float *heading);
 extern int set_cal(int mag, char *cal_file);
 
