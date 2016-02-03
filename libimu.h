@@ -21,6 +21,8 @@ extern int init_mpu(int sample_rate, int yaw_mix_factor);
 extern int read_mpu(float *pitch, float *roll, float *heading);
 extern int set_cal(int mag, char *cal_file);
 
+extern int enableFusion(void);
+extern int disableFusion(void);
 #ifdef __cplusplus
 }
 #endif
