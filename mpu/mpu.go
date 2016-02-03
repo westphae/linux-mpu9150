@@ -32,11 +32,19 @@ import (
 )
 
 // Current version.
-var PackageVersion = "v0.1"
+var PackageVersion = "v0.2b"
 
 // InitMPU
 func InitMPU(sample_rate, yaw_mix_factor int) int {
 	return int(C.init_mpu(C.int(sample_rate), C.int(yaw_mix_factor)))
+}
+
+func GyroFusion(toggle uint8) int {
+	if toggle == 1 {
+		return int(C.enableFusion())
+	} else {
+		return int(C.disableFusion())
+	}
 }
 
 // CloseMPU

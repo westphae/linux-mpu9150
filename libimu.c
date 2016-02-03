@@ -34,10 +34,12 @@
 #include "libimu.h"
 
 
+
 // static void fused_euler_angles(mpudata_t *mpu);
 // static void fused_quaternion(mpudata_t *mpu);
 // static void calibrated_accel(mpudata_t *mpu);
 // static void calibrated_mag(mpudata_t *mpu);
+
 
 
 int i2c_bus;
@@ -49,6 +51,8 @@ void close_mpu(void)
 {
 	mpu9150_exit();
 }
+
+
 
 
 
@@ -71,6 +75,21 @@ int init_mpu(int sample_rate, int yaw_mix_factor)
 	return ret;
 }
 
+int enableFusion() {
+	if (enableAccelerometerFusion()) {
+		printf("libimu: enable accelerometer fusion failed\n");
+		return -1;
+	}
+	return 0;
+}
+
+int disableFusion() {
+	if (disableAccelerometerFusion()) {
+		printf("libimu: disable accelerometer fusion failed\n");
+		return -1;
+	}
+	return 0;
+}
 int read_mpu(float *pitch, float *roll, float *heading)
 {
 	int ret;
@@ -93,6 +112,7 @@ int read_mpu(float *pitch, float *roll, float *heading)
 // 	mpu->fusedEuler[VEC3_Y] * RAD_TO_DEGREE;
 // 	mpu->fusedEuler[VEC3_Z] * RAD_TO_DEGREE;
 // }
+
 
 // void fused_quaternions(mpudata_t *mpu)
 // {
@@ -151,6 +171,7 @@ int set_cal(int mag, char *cal_file)
 		}
 	}
 
+
 	memset(buff, 0, sizeof(buff));
 
 	for (i = 0; i < 6; i++) {
@@ -158,6 +179,7 @@ int set_cal(int mag, char *cal_file)
 			printf("Not enough lines in calibration file\n");
 			break;
 		}
+
 
 		val[i] = atoi(buff);
 
