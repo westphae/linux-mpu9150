@@ -75,17 +75,15 @@ int init_mpu(int sample_rate, int yaw_mix_factor)
 	return ret;
 }
 
-int enableFusion() {
+int enableFusion(void) {
 	if (enableAccelerometerFusion()) {
-		printf("libimu: enable accelerometer fusion failed\n");
 		return -1;
 	}
 	return 0;
 }
 
-int disableFusion() {
+int disableFusion(void) {
 	if (disableAccelerometerFusion()) {
-		printf("libimu: disable accelerometer fusion failed\n");
 		return -1;
 	}
 	return 0;

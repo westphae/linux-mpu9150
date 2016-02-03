@@ -39,12 +39,12 @@ func InitMPU(sample_rate, yaw_mix_factor int) int {
 	return int(C.init_mpu(C.int(sample_rate), C.int(yaw_mix_factor)))
 }
 
-func GyroFusion(toggle uint8) int {
-	if toggle == 1 {
-		return int(C.enableFusion())
-	} else {
-		return int(C.disableFusion())
-	}
+func EnableFusion() int {
+	return int(C.enableFusion())
+}
+
+func DisableFusion() int {
+	return int(C.disableFusion())
 }
 
 // CloseMPU

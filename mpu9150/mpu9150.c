@@ -164,7 +164,7 @@ int mpu9150_init(int i2c_bus, int sample_rate, int mix_factor)
 /* New functions to enable / disable 6axis on the fly */
 
 
-int enableAccelerometerFusion() {
+int enableAccelerometerFusion(void) {
 	if (dmp_enable_feature(DMP_FEATURE_6X_LP_QUAT | DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_CAL_GYRO | DMP_FEATURE_GYRO_CAL)) {
 		printf("Failure enabling accelerometer fusion\n");
 		return -1;
@@ -173,7 +173,7 @@ int enableAccelerometerFusion() {
 	return 0;
 }
 
-int disableAccelerometerFusion() {
+int disableAccelerometerFusion(void) {
 	if (dmp_enable_feature(DMP_FEATURE_LP_QUAT | DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_CAL_GYRO | DMP_FEATURE_GYRO_CAL)) {
 		printf("Failure disabling accelerometer fusion\n");
 		return -1;
