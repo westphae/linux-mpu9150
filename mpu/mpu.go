@@ -62,3 +62,21 @@ func ReadMPU() (pitch, roll, heading float32, err error) {
 	}
 	return
 }
+
+// ReadMPURaw
+func ReadMPURaw() (gx, gy, gz, ax, ay, az, mx, my, mz float32, err error) {
+	i := int(C.read_mpu_raw(
+		(*C.float)(unsafe.Pointer(&gx)),
+		(*C.float)(unsafe.Pointer(&gy)),
+		(*C.float)(unsafe.Pointer(&gz)),
+		(*C.float)(unsafe.Pointer(&ax)),
+		(*C.float)(unsafe.Pointer(&ay)),
+		(*C.float)(unsafe.Pointer(&az)),
+		(*C.float)(unsafe.Pointer(&mx)),
+		(*C.float)(unsafe.Pointer(&my)),
+		(*C.float)(unsafe.Pointer(&mz))))
+	if i == -1 {
+		err = errors.New("error reading MPU")
+	}
+	return
+}
