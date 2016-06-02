@@ -33,15 +33,6 @@
 #include "linux_glue.h"
 #include "libimu.h"
 
-
-
-// static void fused_euler_angles(mpudata_t *mpu);
-// static void fused_quaternion(mpudata_t *mpu);
-// static void calibrated_accel(mpudata_t *mpu);
-// static void calibrated_mag(mpudata_t *mpu);
-
-
-
 int i2c_bus;
 int sample_rate;
 int yaw_mix_factor;
@@ -51,10 +42,6 @@ void close_mpu(void)
 {
 	mpu9150_exit();
 }
-
-
-
-
 
 int init_mpu(int sample_rate, int yaw_mix_factor)
 {
@@ -88,6 +75,7 @@ int disableFusion(void) {
 	}
 	return 0;
 }
+
 int read_mpu(float *pitch, float *roll, float *heading)
 {
 	int ret;
@@ -98,41 +86,25 @@ int read_mpu(float *pitch, float *roll, float *heading)
 	*roll = mpu.fusedEuler[1];
 	*heading = mpu.fusedEuler[2];
 	return ret;
-	// fused_euler_angles(&mpu);
-	// fused_quaternions(&mpu);
-	// calibrated_accel(&mpu);
-	// calibrated_mag(&mpu);
 }
 
-// void fused_euler_angles(mpudata_t *mpu)
-// {
-// 	mpu->fusedEuler[VEC3_X] * RAD_TO_DEGREE;
-// 	mpu->fusedEuler[VEC3_Y] * RAD_TO_DEGREE;
-// 	mpu->fusedEuler[VEC3_Z] * RAD_TO_DEGREE;
-// }
-
-
-// void fused_quaternions(mpudata_t *mpu)
-// {
-// 	mpu->fusedQuat[QUAT_W];
-// 	mpu->fusedQuat[QUAT_X];
-// 	mpu->fusedQuat[QUAT_Y];
-// 	mpu->fusedQuat[QUAT_Z];
-// }
-
-// void calibrated_accel(mpudata_t *mpu)
-// {
-// 	mpu->calibratedAccel[VEC3_X];
-// 	mpu->calibratedAccel[VEC3_Y];
-// 	mpu->calibratedAccel[VEC3_Z];
-// }
-
-// void calibrated_mag(mpudata_t *mpu)
-// {
-// 	mpu->calibratedMag[VEC3_X];
-// 	mpu->calibratedMag[VEC3_Y];
-// 	mpu->calibratedMag[VEC3_Z];
-// }
+int read_mpu_raw(float *gx, float *gy, float *gz, float *ax, float *ay, float *az, float *mx, float *my, float *mz)
+{
+	int ret;
+	static mpudata_t mpu;
+	memset(&mpu, 0, sizeof(mpudata_t));
+	ret = mpu9150_read(&mpu);
+	*gx = mpu.rawGyro[0];
+	*gy = mpu.rawGyro[1];
+	*gz = mpu.rawGyro[2];
+	*ax = mpu.rawAccel[0];
+	*ay = mpu.rawAccel[1];
+	*az = mpu.rawAccel[2];
+	*mx = mpu.rawMag[0];
+	*my = mpu.rawMag[1];
+	*mz = mpu.rawMag[2];
+	return ret;
+}
 
 int set_cal(int mag, char *cal_file)
 {
