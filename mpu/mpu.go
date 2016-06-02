@@ -31,6 +31,11 @@ import (
 	"unsafe"
 )
 
+// Raw data struct
+type RawData struct {
+	gx, gy, gz, ax, ay, az, mx, my, mz float32
+}
+
 // Current version.
 var PackageVersion = "v0.2b"
 
@@ -64,17 +69,17 @@ func ReadMPU() (pitch, roll, heading float32, err error) {
 }
 
 // ReadMPURaw
-func ReadMPURaw() (gx, gy, gz, ax, ay, az, mx, my, mz float32, err error) {
+func ReadMPURaw() (d RawData, err error) {
 	i := int(C.read_mpu_raw(
-		(*C.float)(unsafe.Pointer(&gx)),
-		(*C.float)(unsafe.Pointer(&gy)),
-		(*C.float)(unsafe.Pointer(&gz)),
-		(*C.float)(unsafe.Pointer(&ax)),
-		(*C.float)(unsafe.Pointer(&ay)),
-		(*C.float)(unsafe.Pointer(&az)),
-		(*C.float)(unsafe.Pointer(&mx)),
-		(*C.float)(unsafe.Pointer(&my)),
-		(*C.float)(unsafe.Pointer(&mz))))
+		(*C.float)(unsafe.Pointer(&d.gx)),
+		(*C.float)(unsafe.Pointer(&d.gy)),
+		(*C.float)(unsafe.Pointer(&d.gz)),
+		(*C.float)(unsafe.Pointer(&d.ax)),
+		(*C.float)(unsafe.Pointer(&d.ay)),
+		(*C.float)(unsafe.Pointer(&d.az)),
+		(*C.float)(unsafe.Pointer(&d.mx)),
+		(*C.float)(unsafe.Pointer(&d.my)),
+		(*C.float)(unsafe.Pointer(&d.mz))))
 	if i == -1 {
 		err = errors.New("error reading MPU")
 	}
