@@ -33,7 +33,7 @@ import (
 
 // Raw data struct
 type RawData struct {
-	gx, gy, gz, ax, ay, az, mx, my, mz float32
+	Gx, Gy, Gz, Ax, Ay, Az, Mx, My, Mz float32
 }
 
 // Current version.
