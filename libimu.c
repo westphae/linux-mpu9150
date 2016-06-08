@@ -88,7 +88,7 @@ int read_mpu(float *pitch, float *roll, float *heading)
 	return ret;
 }
 
-int read_mpu_raw(float *gx, float *gy, float *gz, float *ax, float *ay, float *az, float *mx, float *my, float *mz)
+int read_mpu_raw(short *gx, short *gy, short *gz, short *ax, short *ay, short *az, short *mx, short *my, short *mz)
 {
 	int ret;
 	static mpudata_t mpu;
