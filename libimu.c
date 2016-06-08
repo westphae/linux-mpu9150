@@ -106,6 +106,46 @@ int read_mpu_raw(short *gx, short *gy, short *gz, short *ax, short *ay, short *a
 	return ret;
 }
 
+int read_mpu_all(float *pitch, float *roll, float *heading,
+		short *gx, short *gy, short *gz,
+		short *ax, short *ay, short *az,
+		long *qx, long *qy, long *qz, long *qw,
+		short *mx, short *my, short *mz,
+		unsigned long *ts, unsigned long *mts,
+		short *x_accel, short *y_accel, short *z_accel,
+		short *x_mag, short *y_mag, short *z_mag)
+{
+	int ret;
+	static mpudata_t mpu;
+	memset(&mpu, 0, sizeof(mpudata_t));
+	ret = mpu9150_read(&mpu);
+	*pitch = mpu.fusedEuler[0];
+	*roll = mpu.fusedEuler[1];
+	*heading = mpu.fusedEuler[2];
+	*gx = mpu.rawGyro[0];
+	*gy = mpu.rawGyro[1];
+	*gz = mpu.rawGyro[2];
+	*ax = mpu.rawAccel[0];
+	*ay = mpu.rawAccel[1];
+	*az = mpu.rawAccel[2];
+	*qx = mpu.rawQuat[0];
+	*qy = mpu.rawQuat[1];
+	*qz = mpu.rawQuat[2];
+	*qw = mpu.rawQuat[3];
+	*mx = mpu.rawMag[0];
+	*my = mpu.rawMag[1];
+	*mz = mpu.rawMag[2];
+	*ts = mpu.dmpTimestamp;
+	*mts = mpu.magTimestamp;
+	*x_accel = mpu.calibratedAccel[0];
+	*y_accel = mpu.calibratedAccel[1];
+	*z_accel = mpu.calibratedAccel[2];
+	*x_mag = mpu.calibratedMag[0];
+	*y_mag = mpu.calibratedMag[1];
+	*z_mag = mpu.calibratedMag[2];
+	return ret;
+}
+
 int set_cal(int mag, char *cal_file)
 {
 	int i;
