@@ -13,15 +13,15 @@ type SituationUpdate struct {
 	pitch   float64
 	roll    float64
 	heading float64
-	p	float64
-	q	float64
-	r	float64
-	x_a	float64
-	y_a	float64
-	z_a	float64
-	mx	float64
-	my	float64
-	mz	float64
+	p	int16
+	q	int16
+	r	int16
+	x_a	int16
+	y_a	int16
+	z_a	int16
+	mx	int16
+	my	int16
+	mz	int16
 }
 
 var updateChan chan SituationUpdate
@@ -47,29 +47,29 @@ func updateSender(addr string) {
 		u := <-updateChan
 		s := fmt.Sprintf("XATTtesting,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
 			u.heading, u.pitch, u.roll,
-			u.p/32767, u.q/32767, u.r/32767,
-			u.x_a/32767, u.y_a/32767, u.z_a/32767,
-			u.mx/32767, u.my/32767, u.mz/32767)
+			float32(u.p)/32767, float32(u.q)/32767, float32(u.r)/32767,
+			float32(u.x_a)/32767, float32(u.y_a)/32767, float32(u.z_a)/32767,
+			float32(u.mx)/32767, float32(u.my)/32767, float32(u.mz)/32767)
 		fmt.Printf("%s\n", s)
 		conn.Write([]byte(s))
 	}
 }
 
 // Converts from radian to degrees and sends to update channel.
-func sendUpdate(pitch, roll, heading, p, q, r, x_a, y_a, z_a, mx, my, mz float32) {
+func sendUpdate(pitch, roll, heading float32, p, q, r, x_a, y_a, z_a, mx, my, mz int16) {
 	var u SituationUpdate
 	u.pitch = float64(pitch) * (float64(180.0) / math.Pi)
 	u.roll = float64(roll) * (float64(180.0) / math.Pi)
 	u.heading = float64(heading) * (float64(180.0) / math.Pi)
-	u.p = float64(p)
-	u.q = float64(q)
-	u.r = float64(r)
-	u.x_a = float64(x_a)
-	u.y_a = float64(y_a)
-	u.z_a = float64(z_a)
-	u.mx = float64(mx)
-	u.my = float64(my)
-	u.mz = float64(mz)
+	u.p = p
+	u.q = q
+	u.r = r
+	u.x_a = x_a
+	u.y_a = y_a
+	u.z_a = z_a
+	u.mx = mx
+	u.my = my
+	u.mz = mz
 	updateChan <- u
 }
 

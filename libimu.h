@@ -19,7 +19,7 @@ extern void close_mpu(void);
 //extern int init_mpu(void);
 extern int init_mpu(int sample_rate, int yaw_mix_factor);
 extern int read_mpu(float *pitch, float *roll, float *heading);
-extern int read_mpu_raw(float *gx, float *gy, float *gz, float *ax, float *ay, float *az, float *mx, float *my, float *mz);
+extern int read_mpu_raw(short *gx, short *gy, short *gz, short *ax, short *ay, short *az, short *mx, short *my, short *mz);
 extern int set_cal(int mag, char *cal_file);
 
 extern int enableFusion(void);
