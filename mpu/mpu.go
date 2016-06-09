@@ -33,11 +33,20 @@ import (
 
 // Raw data struct
 type RawData struct {
-	Gx, Gy, Gz, Ax, Ay, Az, Mx, My, Mz float32
+	Gx, Gy, Gz, Ax, Ay, Az, Mx, My, Mz int16
+}
+
+type IMUData struct {
+	Pitch, Roll, Heading float32
+	Gx, Gy, Gz, Ax, Ay, Az int16
+	Qx, Qy, Qz, Qw int32
+	Mx, My, Mz int16
+	Ts, Tsm uint32
+	X_accel, Y_accel, Z_accel, X_mag, Y_mag, Z_mag int16
 }
 
 // Current version.
-var PackageVersion = "v0.2b"
+var PackageVersion = "v0.2c"
 
 // InitMPU
 func InitMPU(sample_rate, yaw_mix_factor int) int {
@@ -71,17 +80,49 @@ func ReadMPU() (pitch, roll, heading float32, err error) {
 // ReadMPURaw
 func ReadMPURaw() (d RawData, err error) {
 	i := int(C.read_mpu_raw(
-		(*C.float)(unsafe.Pointer(&d.Gx)),
-		(*C.float)(unsafe.Pointer(&d.Gy)),
-		(*C.float)(unsafe.Pointer(&d.Gz)),
-		(*C.float)(unsafe.Pointer(&d.Ax)),
-		(*C.float)(unsafe.Pointer(&d.Ay)),
-		(*C.float)(unsafe.Pointer(&d.Az)),
-		(*C.float)(unsafe.Pointer(&d.Mx)),
-		(*C.float)(unsafe.Pointer(&d.My)),
-		(*C.float)(unsafe.Pointer(&d.Mz))))
+		(*C.short)(unsafe.Pointer(&d.Gx)),
+		(*C.short)(unsafe.Pointer(&d.Gy)),
+		(*C.short)(unsafe.Pointer(&d.Gz)),
+		(*C.short)(unsafe.Pointer(&d.Ax)),
+		(*C.short)(unsafe.Pointer(&d.Ay)),
+		(*C.short)(unsafe.Pointer(&d.Az)),
+		(*C.short)(unsafe.Pointer(&d.Mx)),
+		(*C.short)(unsafe.Pointer(&d.My)),
+		(*C.short)(unsafe.Pointer(&d.Mz))))
 	if i == -1 {
 		err = errors.New("error reading MPU")
+	}
+	return
+}
+
+func ReadMPUAll() (d IMUData, err error) {
+	i := int(C.read_mpu_all(
+		(*C.float)(unsafe.Pointer(&d.Pitch)),
+		(*C.float)(unsafe.Pointer(&d.Roll)),
+		(*C.float)(unsafe.Pointer(&d.Heading)),
+		(*C.short)(unsafe.Pointer(&d.Gx)),
+		(*C.short)(unsafe.Pointer(&d.Gy)),
+		(*C.short)(unsafe.Pointer(&d.Gz)),
+		(*C.short)(unsafe.Pointer(&d.Ax)),
+		(*C.short)(unsafe.Pointer(&d.Ay)),
+		(*C.short)(unsafe.Pointer(&d.Az)),
+		(*C.long)(unsafe.Pointer(&d.Qx)),
+		(*C.long)(unsafe.Pointer(&d.Qy)),
+		(*C.long)(unsafe.Pointer(&d.Qz)),
+		(*C.long)(unsafe.Pointer(&d.Qw)),
+		(*C.short)(unsafe.Pointer(&d.Mx)),
+		(*C.short)(unsafe.Pointer(&d.My)),
+		(*C.short)(unsafe.Pointer(&d.Mz)),
+		(*C.ulong)(unsafe.Pointer(&d.Ts)),
+		(*C.ulong)(unsafe.Pointer(&d.Tsm)),
+		(*C.short)(unsafe.Pointer(&d.X_accel)),
+		(*C.short)(unsafe.Pointer(&d.Y_accel)),
+		(*C.short)(unsafe.Pointer(&d.Z_accel)),
+		(*C.short)(unsafe.Pointer(&d.X_mag)),
+		(*C.short)(unsafe.Pointer(&d.Y_mag)),
+		(*C.short)(unsafe.Pointer(&d.Z_mag))))
+	if i == -1 {
+		err = errors.New("error reading all data from MPU")
 	}
 	return
 }
